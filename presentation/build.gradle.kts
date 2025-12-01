@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.androidLint)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
+// Missing Compose plugin
 }
 
 kotlin {
@@ -59,8 +62,14 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(projects.domain) // Dependency on the domain module
+
                 implementation(libs.kotlin.stdlib)
-                // Add KMP dependencies here
+                implementation(libs.bundles.compose.common) // Using the compose bundle
+                //implementation(libs.androidx.navigation.compose) // kmp nav
+                implementation(libs.bundles.voyager)  // navigation
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose) // Koin for Compose
             }
         }
 
@@ -72,9 +81,9 @@ kotlin {
 
         androidMain {
             dependencies {
-                // Add Android-specific dependencies here. Note that this source set depends on
-                // commonMain by default and will correctly pull the Android artifacts of any KMP
-                // dependencies declared in commonMain.
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.lifecycle.runtimeCompose)
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
             }
         }
 
@@ -83,8 +92,7 @@ kotlin {
                 implementation(libs.androidx.runner)
                 implementation(libs.androidx.core)
                 implementation(libs.androidx.testExt.junit)
-            }
-        }
+            }        }
 
         iosMain {
             dependencies {
