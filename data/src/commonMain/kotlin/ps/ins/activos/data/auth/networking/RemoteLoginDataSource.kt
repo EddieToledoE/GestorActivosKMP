@@ -18,7 +18,7 @@ import ps.ins.activos.domain.core.util.map
 class RemoteLoginDataSource(private val httpClient: HttpClient) : LoginDataSource {
     override suspend fun doLogin(user: LoginUser): Result<User, NetworkError> {
         return safeCall<UserResponseDto> {
-            httpClient.post("http://localhost:5111/api/Auth/login") {
+            httpClient.post("http://192.168.99.52:45455/api/Auth/login") {
                 setBody(user.toDto())
             }
         }.map { userResponseDto ->

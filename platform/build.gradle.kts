@@ -60,6 +60,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
+                implementation(libs.ktor.client.core)
                 // Add KMP dependencies here
             }
         }
@@ -74,6 +75,7 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.core.ktx)
+                implementation(libs.ktor.client.okhttp)
             }
         }
 

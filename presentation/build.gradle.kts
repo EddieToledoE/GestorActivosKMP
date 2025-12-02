@@ -66,7 +66,6 @@ kotlin {
 
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.bundles.compose.common) // Using the compose bundle
-                //implementation(libs.androidx.navigation.compose) // kmp nav
                 implementation(libs.bundles.voyager)  // navigation
                 implementation(libs.koin.core)
                 implementation(libs.koin.compose) // Koin for Compose
