@@ -1,5 +1,6 @@
 package ps.ins.activos.presentation.auth.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
+import gestoractivos.composeapp.generated.resources.LogoMain
+import gestoractivos.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.painterResource
+
+
 
 class LoginScreen : Screen {
     @Composable
@@ -62,6 +68,10 @@ private fun LoginScreenContent(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Image(
+                    painter = painterResource(resource = Res.drawable.LogoMain),
+                    contentDescription = "Logo"
+                    )
                 Text(
                     text = "Inicio de Sesión",
                     style = MaterialTheme.typography.headlineMedium

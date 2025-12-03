@@ -10,7 +10,7 @@ import ps.ins.activos.ui.theme.AppTheme
 @Composable
 @Preview
 fun App() {
-    AppTheme(dynamicColor = true) {
+    AppTheme(dynamicColor = false) {
         Navigator(LoginScreen())
     }
 }

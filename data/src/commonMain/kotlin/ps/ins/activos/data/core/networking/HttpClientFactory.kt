@@ -5,6 +5,7 @@ import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -14,9 +15,6 @@ import kotlinx.serialization.json.Json
 object HttpClientFactory {
     fun create(engine: HttpClientEngine): HttpClient {
         return HttpClient(engine = engine) {
-            install(Logging) {
-                level = LogLevel.ALL
-            }
             install(ContentNegotiation) {
                 json(Json {
                     ignoreUnknownKeys = true
@@ -24,8 +22,17 @@ object HttpClientFactory {
                     isLenient = true
                 })
             }
+            // Este plugin imprimirá todas las peticiones y respuestas en Logcat
+            install(Logging) {
+                level = LogLevel.ALL
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        println("Ktor Logger: $message")
+                    }
+                }
+            }
             defaultRequest {
-                contentType(type = ContentType.Application.Json)
+                contentType(ContentType.Application.Json)
             }
         }
     }
