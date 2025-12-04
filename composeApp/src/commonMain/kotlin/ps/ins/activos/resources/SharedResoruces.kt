@@ -2,12 +2,11 @@ package ps.ins.activos.resources
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
-import gestoractivos.composeapp.generated.resources.LogoMain
 import gestoractivos.composeapp.generated.resources.Res
+import gestoractivos.composeapp.generated.resources.logomain
 import org.jetbrains.compose.resources.painterResource
 
-actual object AppImages {
+object SharedImages {
     @Composable
-    actual val logoMain: Painter
-        get() = painterResource(Res.drawable.LogoMain)
+    fun logoMain(): Painter = painterResource(Res.drawable.logomain)
 }

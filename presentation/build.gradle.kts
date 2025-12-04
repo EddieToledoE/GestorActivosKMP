@@ -63,7 +63,6 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.domain) // Dependency on the domain module
-
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.bundles.compose.common) // Using the compose bundle
                 implementation(libs.bundles.voyager)  // navigation
@@ -104,4 +103,9 @@ kotlin {
         }
     }
 
+}
+compose {
+    resources {
+        publicResClass = true
+    }
 }

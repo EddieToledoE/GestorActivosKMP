@@ -1,6 +1,8 @@
 package ps.ins.activos.presentation.auth.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -16,47 +19,30 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.koinScreenModel
-import gestoractivos.composeapp.generated.resources.LogoMain
-import gestoractivos.composeapp.generated.resources.Res
-import org.jetbrains.compose.resources.painterResource
 
 
-
-class LoginScreen : Screen {
-    @Composable
-    override fun Content() {
-        val screenModel = koinScreenModel<LoginScreenModel>()
-        val state by screenModel.state.collectAsState()
-        
-        LoginScreenContent(
-            state = state,
-            onEmailChange = screenModel::onEmailChange,
-            onPasswordChange = screenModel::onPasswordChange,
-            onLoginClick = screenModel::onLoginClick
-        )
-    }
-}
 
 @Composable
-private fun LoginScreenContent(
+fun LoginScreenContent(
     state: LoginState,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    logoPainter: Painter
 ) {
     Scaffold { paddingValues ->
         Box(
-            modifier = Modifier
+            modifier = Modifier.background( color = if (isSystemInDarkTheme()) Color(0xFF1C1B1C) else  Color(0xFFE3E3E3))
                 .fillMaxSize()
                 .padding(paddingValues),
             contentAlignment = Alignment.Center
@@ -68,13 +54,10 @@ private fun LoginScreenContent(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    painter = painterResource(resource = Res.drawable.LogoMain),
-                    contentDescription = "Logo"
-                    )
+                Image(painter = logoPainter, contentDescription = "Logo", colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary) )
                 Text(
-                    text = "Inicio de Sesión",
-                    style = MaterialTheme.typography.headlineMedium
+                    text = "Gestor de Activos",
+                    style = MaterialTheme.typography.headlineLarge
                 )
                 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -83,7 +66,7 @@ private fun LoginScreenContent(
                     value = state.email,
                     onValueChange = onEmailChange,
                     label = { Text("Correo") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                     enabled = !state.isLoading,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email
@@ -93,11 +76,11 @@ private fun LoginScreenContent(
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
-                OutlinedTextField(
+                TextField(
                     value = state.password,
                     onValueChange = onPasswordChange,
                     label = { Text("Contraseña") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                     enabled = !state.isLoading,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
@@ -119,8 +102,9 @@ private fun LoginScreenContent(
                 
                 Button(
                     onClick = onLoginClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = !state.isLoading
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+                    enabled = !state.isLoading,
+                    shape = RoundedCornerShape(8.dp)
                 ) {
                     if (state.isLoading) {
                         CircularProgressIndicator(
@@ -128,7 +112,7 @@ private fun LoginScreenContent(
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     } else {
-                        Text("Entrar")
+                        Text("Iniciar Sesion")
                     }
                 }
                 
