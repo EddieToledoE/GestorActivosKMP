@@ -15,11 +15,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButtonDefaults.elevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,18 +68,27 @@ fun LoginScreenContent(
                 OutlinedTextField(
                     value = state.email,
                     onValueChange = onEmailChange,
-                    label = { Text("Correo") },
+                    label = { Text(text = "Correo") },
+                    //placeholder = { Text("Correo") },
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                     enabled = !state.isLoading,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email
                     ),
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.primary,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+
                 )
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
-                TextField(
+                OutlinedTextField(
                     value = state.password,
                     onValueChange = onPasswordChange,
                     label = { Text("Contraseña") },
@@ -86,7 +98,14 @@ fun LoginScreenContent(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password
                     ),
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.primary,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    ),
+                    shape = RoundedCornerShape(12.dp),
                 )
                 
                 if (state.error != null) {
@@ -109,7 +128,7 @@ fun LoginScreenContent(
                     if (state.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.padding(8.dp),
-                            color = MaterialTheme.colorScheme.onPrimary
+                            color = MaterialTheme.colorScheme.primary
                         )
                     } else {
                         Text("Iniciar Sesion")

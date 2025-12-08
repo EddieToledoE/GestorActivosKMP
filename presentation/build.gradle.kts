@@ -68,6 +68,8 @@ kotlin {
                 implementation(libs.bundles.voyager)  // navigation
                 implementation(libs.koin.core)
                 implementation(libs.koin.compose) // Koin for Compose
+                implementation(libs.multiplatform.settings)
+                implementation(libs.multiplatform.settings.no.arg)
             }
         }
 
