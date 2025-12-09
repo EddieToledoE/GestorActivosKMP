@@ -15,33 +15,60 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButtonDefaults.elevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import gestoractivos.presentation.generated.resources.Res
+import gestoractivos.presentation.generated.resources.logomain
+import org.jetbrains.compose.resources.painterResource
+import ps.ins.activos.presentation.home.HomeScreen
 
 
+object LoginScreen : Screen {
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val screenModel = koinScreenModel<LoginScreenModel>()
+        val state by screenModel.state.collectAsState()
+
+        LaunchedEffect(state.user) {
+            if (state.user != null) {
+                navigator.replaceAll(HomeScreen)
+            }
+        }
+
+        LoginScreenContent(
+            state = state,
+            onEmailChange = screenModel::onEmailChange,
+            onPasswordChange = screenModel::onPasswordChange,
+            onLoginClick = screenModel::onLoginClick
+        )
+    }
+}
 
 @Composable
 fun LoginScreenContent(
     state: LoginState,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onLoginClick: () -> Unit,
-    logoPainter: Painter
+    onLoginClick: () -> Unit
 ) {
     Scaffold { paddingValues ->
         Box(
@@ -57,7 +84,7 @@ fun LoginScreenContent(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(painter = logoPainter, contentDescription = "Logo", colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary) )
+                Image(painter = painterResource(Res.drawable.logomain), contentDescription = "Logo", colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary) )
                 Text(
                     text = "Gestor de Activos",
                     style = MaterialTheme.typography.headlineLarge
@@ -69,7 +96,6 @@ fun LoginScreenContent(
                     value = state.email,
                     onValueChange = onEmailChange,
                     label = { Text(text = "Correo") },
-                    //placeholder = { Text("Correo") },
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                     enabled = !state.isLoading,
                     keyboardOptions = KeyboardOptions(

@@ -59,7 +59,8 @@ class LoginScreenModel(
                 is Result.Success -> {
                     val user = result.data
                     settings.putBoolean("isLoggedIn", true)
-                    settings.putString("userId", user.id) // Assuming id is Number or UUID, convert to String
+                    settings.putString("userId", user.id)
+                    settings.putString("fullName", user.fullName)
 
                     mutableState.value = state.value.copy(
                         isLoading = false,

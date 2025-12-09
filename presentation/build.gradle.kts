@@ -16,6 +16,7 @@ kotlin {
         namespace = "ps.ins.activos.presentation"
         compileSdk = 36
         minSdk = 24
+        androidResources.enable = true
 
         withHostTestBuilder {
         }
@@ -70,6 +71,8 @@ kotlin {
                 implementation(libs.koin.compose) // Koin for Compose
                 implementation(libs.multiplatform.settings)
                 implementation(libs.multiplatform.settings.no.arg)
+                implementation(compose.materialIconsExtended)
+                implementation(compose.components.resources) //resources
             }
         }
 
