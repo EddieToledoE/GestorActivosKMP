@@ -7,6 +7,11 @@ data class UserResponseDto(
     val idUsuario: String,
     val nombres: String,
     val apellidoPaterno: String,
+    val apellidoMaterno: String,
+    val correo: String,
+    val claveFortia: String?,
+    val idCentroCostoPrincipal: Int,
+    val centroCostoPrincipal: String,
     val roles: List<RoleDto>,
     val permisos: List<String>,
     val centrosCostoAcceso: List<CostCenterDto>
@@ -24,5 +29,6 @@ data class CostCenterDto(
     val idCentroCosto: Int,
     val razonSocial: String,
     val ubicacion: String,
-    val area: String
+    val area: String,
+    val activo: Boolean
 )

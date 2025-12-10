@@ -21,6 +21,18 @@ suspend fun <T : Any> safeCall(
         println("Error de servidor (5xx): ${e.response.status}")
         e.printStackTrace()
         Result.Error(NetworkError.INTERNAL_SERVER_ERROR)
+    } catch (e: io.ktor.client.plugins.HttpRequestTimeoutException) {
+        println("Error de Timeout (Ktor): ${e.message}")
+        e.printStackTrace()
+        Result.Error(NetworkError.REQUEST_TIMEOUT)
+    } catch (e: io.ktor.client.network.sockets.ConnectTimeoutException) {
+        println("Error de Conexión (Timeout): ${e.message}")
+        e.printStackTrace()
+        Result.Error(NetworkError.REQUEST_TIMEOUT)
+    } catch (e: io.ktor.client.network.sockets.SocketTimeoutException) {
+        println("Error de Socket (Timeout): ${e.message}")
+        e.printStackTrace()
+        Result.Error(NetworkError.REQUEST_TIMEOUT)
     } catch (e: IOException) {
         println("Error de Red/Conexión (IO): No se pudo alcanzar el servidor. ¿Firewall? ¿IP incorrecta?")
         e.printStackTrace()

@@ -23,14 +23,14 @@ object HttpClientFactory {
                     isLenient = true
                 })
             }
-            install(HttpTimeout) {
+    /*        install(HttpTimeout) {
                 requestTimeoutMillis = 30_000
                 connectTimeoutMillis = 15_000
                 socketTimeoutMillis = 30_000
-            }
+            }*/
             // Este plugin imprimirá todas las peticiones y respuestas en Logcat
             install(Logging) {
-                level = LogLevel.ALL
+                level = LogLevel.HEADERS
                 logger = object : Logger {
                     override fun log(message: String) {
                         println("Ktor Logger: $message")

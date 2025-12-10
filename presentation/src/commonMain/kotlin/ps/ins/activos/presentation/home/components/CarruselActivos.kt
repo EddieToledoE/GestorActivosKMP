@@ -1,11 +1,16 @@
 package ps.ins.activos.presentation.home.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,6 +19,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -25,22 +36,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.russhwolf.settings.Settings
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import ps.ins.activos.domain.activos.model.ActivoEntity
 // Import or define replaceLocalhostWithCurrentIp
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CarruselActivos(
     activos: List<ActivoEntity>,
     modifier: Modifier = Modifier
 ) {
+    val displayActivos = activos.take(8)
+    val chunks = displayActivos.chunked(4)
+    val pagerState = rememberPagerState { chunks.size }
+
     Column(modifier = modifier) {
         Text(
             text = "Mis Activos",
@@ -50,18 +64,8 @@ fun CarruselActivos(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-        KamelImage(
-            resource = { asyncPainterResource( data = "https://res.cloudinary.com/dwjnodqln/image/upload/v1699737730/i8xvwjujmexnqhb39xvh.jpg") },
-            contentDescription = "",
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp),
-            alignment = Alignment.Center,
-            contentScale = ContentScale.Fit,
-            alpha = DefaultAlpha,
-            contentAlignment = Alignment.Center
-        )
-        if (activos.isEmpty()) {
+
+        if (displayActivos.isEmpty()) {
              Text(
                 text = "No tienes activos asignados",
                 style = MaterialTheme.typography.bodyMedium,
@@ -69,12 +73,34 @@ fun CarruselActivos(
                 modifier = Modifier.padding(horizontal = 16.dp)
              )
         } else {
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(activos) { activo ->
-                    ActivoItem(activo)
+            VerticalPager(
+                state = pagerState,
+                modifier = Modifier.height(420.dp).fillMaxWidth(), // Altura suficiente para 2 filas
+                contentPadding = PaddingValues(16.dp),
+                pageSpacing = 16.dp
+            ) { pageIndex ->
+                val pageItems = chunks.getOrElse(pageIndex) { emptyList() }
+                
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    // Fila 1
+                    Row(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        GridItem(pageItems.getOrNull(0))
+                        GridItem(pageItems.getOrNull(1))
+                    }
+                    // Fila 2
+                    Row(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        GridItem(pageItems.getOrNull(2))
+                        GridItem(pageItems.getOrNull(3))
+                    }
                 }
             }
         }
@@ -82,27 +108,34 @@ fun CarruselActivos(
 }
 
 @Composable
-fun ActivoItem(activo: ActivoEntity) {
+fun RowScope.GridItem(activo: ActivoEntity?) {
+    Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
+        if (activo != null) {
+            ActivoItem(activo, modifier = Modifier.fillMaxSize())
+        }
+    }
+}
+
+@Composable
+fun ActivoItem(activo: ActivoEntity, modifier: Modifier = Modifier) {
     Card(
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        modifier = Modifier.width(160.dp)
+        colors = CardDefaults.cardColors(containerColor = if(isSystemInDarkTheme())MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface),
+        modifier = modifier
     ) {
         Column {
-            val resource = asyncPainterResource(data = "https://res.cloudinary.com/dwjnodqln/image/upload/v1699737730/i8xvwjujmexnqhb39xvh.jpg")
+            val resource = asyncPainterResource(data = replaceLocalhostWithCurrentIp(activo.imagenUrl))
             KamelImage(
-                resource = { resource },
-                contentDescription = "",
+                resource = {resource},
+                contentDescription = activo.nombre,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp),
-                alignment = Alignment.Center,
-                contentScale = ContentScale.Fit,
-                alpha = DefaultAlpha,
-                contentAlignment = Alignment.Center
+                    .weight(1f), // La imagen ocupa el espacio disponible
+                contentScale = ContentScale.Crop,
+                onFailure = { },
+                onLoading = { }
             )
 
-            
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(
                     text = activo.nombre,
@@ -112,8 +145,10 @@ fun ActivoItem(activo: ActivoEntity) {
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                
-                EstadoBadge(activo.estado)
+                Row {
+                    EstadoBadge(activo.estado)
+                }
+
             }
         }
     }
@@ -122,28 +157,24 @@ fun ActivoItem(activo: ActivoEntity) {
 @Composable
 fun EstadoBadge(estado: String) {
     val color = when (estado.lowercase()) {
-        "bueno" -> Color.Green.copy(alpha = 0.2f)
+        "activo" -> Color(color=0xFF4F6600).copy(alpha = 0.8f)
         "regular" -> Color.Yellow.copy(alpha = 0.2f)
         "malo" -> Color.Red.copy(alpha = 0.2f)
         else -> Color.Gray.copy(alpha = 0.2f)
     }
-    
-    val textColor = when (estado.lowercase()) {
-        "bueno" -> Color(0xFF006400)
-        "regular" -> Color(0xFF8B8000)
-        "malo" -> Color.Red
-        else -> Color.Gray
-    }
 
-    Text(
-        text = estado,
-        style = MaterialTheme.typography.labelSmall,
-        color = textColor,
-        modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(color)
-            .padding(horizontal = 6.dp, vertical = 2.dp)
-    )
+
+    Box(modifier = Modifier.clip(shape = CircleShape).size(20.dp).background(color))
+        Text(
+            text = estado,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .clip(RoundedCornerShape(4.dp))
+                .padding(horizontal = 6.dp, vertical = 2.dp)
+        )
+
+
 }
 
 // Temporary placeholder if not found, to be replaced by correct import

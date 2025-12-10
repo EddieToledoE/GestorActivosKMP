@@ -24,7 +24,7 @@ fun App() {
         AppTheme(dynamicColor = false) {
             val settings = Settings()
             val isLoggedIn = settings.getBoolean("isLoggedIn", false)
-            val initialScreen = if (isLoggedIn) LoginScreen else HomeScreen
+            val initialScreen = if (isLoggedIn)  LoginScreen else HomeScreen
             Navigator(initialScreen)
         }
     }
