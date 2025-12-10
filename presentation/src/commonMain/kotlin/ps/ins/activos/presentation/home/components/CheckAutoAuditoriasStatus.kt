@@ -2,10 +2,13 @@ package ps.ins.activos.presentation.home.components
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,4 +34,7 @@ fun CheckAutoAuditoriaStatus (){
         Text(text = "Auditoría Mensual Pendiente", fontSize = MaterialTheme.typography.bodyLarge.fontSize, fontWeight = FontWeight.Medium)
     }
     Text(text = "Finalizar antes de : 30 de Octubre")
+    Spacer(modifier = Modifier.height(16.dp))
+    HorizontalDivider(modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp), thickness = 1.dp, color = MaterialTheme.colorScheme.primary)
+    Spacer(modifier = Modifier.height(16.dp))
 }

@@ -27,6 +27,10 @@ compose = "1.7.0"
 navigationCompose = "2.8.0"
 multiplatformSettings = "1.2.0"
 compose-material-icons-extended = "1.7.8"
+buildkonfig = "0.17.1"
+kamel = "1.0.8"
+
+
 
 
 [libraries]
@@ -43,7 +47,8 @@ androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
-
+kamel = { group = "media.kamel", name = "kamel-image", version.ref = "kamel" }
+kamel-default = { group = "media.kamel", name = "kamel-image-default", version.ref = "kamel" }
 
 # Multiplatform Settings
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
@@ -105,6 +110,7 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 androidLint = { id = "com.android.lint", version.ref = "agp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
 
 [bundles]
 

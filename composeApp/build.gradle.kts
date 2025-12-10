@@ -56,6 +56,10 @@ kotlin {
             // Settings
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.no.arg)
+
+            // Kamel
+            implementation(libs.kamel)
+            implementation(libs.kamel.default)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -99,4 +103,6 @@ compose {
         publicResClass = true
     }
 }
+
+
 

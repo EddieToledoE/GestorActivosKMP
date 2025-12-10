@@ -73,6 +73,7 @@ kotlin {
                 implementation(libs.multiplatform.settings.no.arg)
                 implementation(compose.materialIconsExtended)
                 implementation(compose.components.resources) //resources
+                implementation(libs.kamel)
             }
         }
 

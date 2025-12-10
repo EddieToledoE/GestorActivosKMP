@@ -7,6 +7,7 @@ import io.ktor.client.request.setBody
 import ps.ins.activos.data.auth.dto.UserResponseDto
 import ps.ins.activos.data.auth.mappers.toDomain
 import ps.ins.activos.data.auth.mappers.toDto
+import ps.ins.activos.data.core.networking.constructUrl
 import ps.ins.activos.data.core.networking.safeCall
 import ps.ins.activos.domain.auth.datasource.LoginDataSource
 import ps.ins.activos.domain.auth.entities.LoginUser
@@ -15,10 +16,12 @@ import ps.ins.activos.domain.core.util.NetworkError
 import ps.ins.activos.domain.core.util.Result
 import ps.ins.activos.domain.core.util.map
 
+
 class RemoteLoginDataSource(private val httpClient: HttpClient) : LoginDataSource {
     override suspend fun doLogin(user: LoginUser): Result<User, NetworkError> {
         return safeCall<UserResponseDto> {
-            httpClient.post("https://goodyellowmouse1.conveyor.cloud/api/Auth/login") {
+            httpClient.post(
+                urlString = constructUrl("/Auth/login")) {
                 setBody(user.toDto())
             }.body<UserResponseDto>()
         }.map { userResponseDto ->

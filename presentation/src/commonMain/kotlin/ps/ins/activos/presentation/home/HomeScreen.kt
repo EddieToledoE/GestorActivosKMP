@@ -29,26 +29,35 @@ import ps.ins.activos.presentation.home.components.CheckAutoAuditoriaStatus
 import ps.ins.activos.presentation.home.components.QuickView
 import ps.ins.activos.presentation.home.components.SearchActivos
 import ps.ins.activos.presentation.home.components.TopAppBar
+import ps.ins.activos.presentation.home.components.CarruselActivos
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import cafe.adriel.voyager.koin.koinScreenModel
 
 object HomeScreen : Screen {
-    @Composable
+@Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val settings = koinInject<Settings>()
-
+        val screenModel = koinScreenModel<HomeScreenModel>()
+        
         HomeScreenContent(
             onLogoutClick = {
                 settings.clear()
                 navigator.replaceAll(LoginScreen)
-            }
+            },
+            screenModel = screenModel
         )
     }
 }
 
 @Composable
 fun HomeScreenContent(
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    screenModel: HomeScreenModel
 ) {
+    val state by screenModel.state.collectAsState()
+
     Scaffold { paddingValues ->
         Box(
             modifier = Modifier
@@ -60,15 +69,17 @@ fun HomeScreenContent(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 TopAppBar(onLogoutClick)
                 Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 SearchActivos()
                 Spacer(modifier = Modifier.height(16.dp))
                 HorizontalDivider(modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp), thickness = 1.dp, color = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(16.dp))
                 CheckAutoAuditoriaStatus()
-                Spacer(modifier = Modifier.height(16.dp))
-                HorizontalDivider(modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp), thickness = 1.dp, color = MaterialTheme.colorScheme.primary)
-                Spacer(modifier = Modifier.height(16.dp))
                 QuickView()
+                CarruselActivos(
+                    activos = state.activos,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
             }
         }

@@ -69,6 +69,9 @@ kotlin {
                 implementation(libs.koin.compose)
                 // Add KMP dependencies here
                implementation(projects.domain)
+                implementation(projects.config)
+                implementation(libs.multiplatform.settings)
+                implementation(libs.multiplatform.settings.no.arg)
             }
         }
 

@@ -33,9 +33,6 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TopAppBar(onLogoutClick : ()-> Unit) {
     TopAppBar(
-   /*     navigationIcon = {
-            Icon(modifier = Modifier.size(60.dp), painter = painterResource(Res.drawable.logomain), contentDescription = "Logo", tint = MaterialTheme.colorScheme.primary)
-        },*/
         title = {
             Column {
                 Text(text = "Hola, ${Settings().getString(key = "fullName", defaultValue = "Alex Winter")}")
