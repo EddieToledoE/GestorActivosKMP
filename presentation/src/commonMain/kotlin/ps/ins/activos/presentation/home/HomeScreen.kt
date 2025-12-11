@@ -30,6 +30,7 @@ import ps.ins.activos.presentation.home.components.QuickView
 import ps.ins.activos.presentation.home.components.SearchActivos
 import ps.ins.activos.presentation.home.components.TopAppBar
 import ps.ins.activos.presentation.home.components.CarruselActivos
+import ps.ins.activos.presentation.search.SearchScreen
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.koin.koinScreenModel
@@ -46,7 +47,10 @@ object HomeScreen : Screen {
                 settings.clear()
                 navigator.replaceAll(LoginScreen)
             },
-            screenModel = screenModel
+            screenModel = screenModel,
+            onSearchClick = {
+                navigator.push(SearchScreen)
+            }
         )
     }
 }
@@ -54,6 +58,7 @@ object HomeScreen : Screen {
 @Composable
 fun HomeScreenContent(
     onLogoutClick: () -> Unit,
+    onSearchClick: () -> Unit,
     screenModel: HomeScreenModel
 ) {
     val state by screenModel.state.collectAsState()
@@ -70,7 +75,7 @@ fun HomeScreenContent(
                 TopAppBar(onLogoutClick)
                 Spacer(modifier = Modifier.height(16.dp))
                 Spacer(modifier = Modifier.height(16.dp))
-                SearchActivos()
+                SearchActivos(onClick = onSearchClick)
                 Spacer(modifier = Modifier.height(16.dp))
                 HorizontalDivider(modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp), thickness = 1.dp, color = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(16.dp))

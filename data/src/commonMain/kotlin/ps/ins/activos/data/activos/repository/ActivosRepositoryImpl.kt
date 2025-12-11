@@ -13,7 +13,15 @@ class ActivosRepositoryImpl(
 ) : ActivosRepository {
     override suspend fun getActivosPropios(): Result<List<ActivoEntity>, NetworkError> {
         return remoteDataSource.getActivosPropios().map { dtos ->
-            dtos.map { it.toDomain() }
+            dtos.map { it.toDomain(isPropio = true) }
+        }
+    }
+
+    override suspend fun getAllActivos(): Result<List<ActivoEntity>, NetworkError> {
+        return remoteDataSource.getAllActivos().map { response ->
+            val propios = response.activos_Propios.map { it.toDomain(isPropio = true) }
+            val centros = response.centrosCosto?.values?.flatten()?.map { it.toDomain(isPropio = false) } ?: emptyList()
+            propios + centros
         }
     }
 }

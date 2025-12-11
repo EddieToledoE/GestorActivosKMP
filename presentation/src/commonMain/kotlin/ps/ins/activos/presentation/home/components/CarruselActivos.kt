@@ -146,7 +146,7 @@ fun ActivoItem(activo: ActivoEntity, modifier: Modifier = Modifier) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
-                    EstadoBadge(activo.estado)
+                    EstadoBadge(activo.estado, activo.categoria)
                 }
 
             }
@@ -155,7 +155,7 @@ fun ActivoItem(activo: ActivoEntity, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EstadoBadge(estado: String) {
+fun EstadoBadge(estado: String, categoria: String) {
     val color = when (estado.lowercase()) {
         "activo" -> Color(color=0xFF4F6600).copy(alpha = 0.8f)
         "regular" -> Color.Yellow.copy(alpha = 0.2f)
@@ -166,7 +166,7 @@ fun EstadoBadge(estado: String) {
 
     Box(modifier = Modifier.clip(shape = CircleShape).size(20.dp).background(color))
         Text(
-            text = estado,
+            text = "$estado - $categoria ",
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier

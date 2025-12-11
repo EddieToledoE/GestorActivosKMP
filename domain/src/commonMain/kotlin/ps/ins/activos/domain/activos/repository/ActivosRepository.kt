@@ -6,4 +6,5 @@ import ps.ins.activos.domain.core.util.Result
 
 interface ActivosRepository {
     suspend fun getActivosPropios(): Result<List<ActivoEntity>, NetworkError>
+    suspend fun getAllActivos(): Result<List<ActivoEntity>, NetworkError>
 }

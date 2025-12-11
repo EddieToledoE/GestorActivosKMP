@@ -11,5 +11,6 @@ data class ActivoEntity(
     val imagenUrl: String,
     val marca: String,
     val modelo: String,
-    val etiqueta: String
+    val etiqueta: String,
+    val isPropio: Boolean = false
 )

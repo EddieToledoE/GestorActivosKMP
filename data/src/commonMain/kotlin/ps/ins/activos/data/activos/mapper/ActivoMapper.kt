@@ -3,7 +3,7 @@ package ps.ins.activos.data.activos.mapper
 import ps.ins.activos.data.activos.dto.ActivoDto
 import ps.ins.activos.domain.activos.model.ActivoEntity
 
-fun ActivoDto.toDomain(): ActivoEntity {
+fun ActivoDto.toDomain(isPropio: Boolean = false): ActivoEntity {
     return ActivoEntity(
         idActivo = idActivo,
         nombre = nombre,
@@ -15,6 +15,7 @@ fun ActivoDto.toDomain(): ActivoEntity {
         imagenUrl = imagenUrl,
         marca = marca,
         modelo = modelo,
-        etiqueta = etiqueta
+        etiqueta = etiqueta,
+        isPropio = isPropio
     )
 }

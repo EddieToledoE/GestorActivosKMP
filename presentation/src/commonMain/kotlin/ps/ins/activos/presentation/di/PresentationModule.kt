@@ -4,8 +4,9 @@ import com.russhwolf.settings.Settings
 import org.koin.dsl.module
 import ps.ins.activos.presentation.auth.di.authPresentationModule
 import ps.ins.activos.presentation.home.di.homeModule
+import ps.ins.activos.presentation.search.di.searchModule
 
 val presentationModule = module {
-    includes(authPresentationModule, homeModule)
+    includes(authPresentationModule, homeModule, searchModule)
     single<Settings> { Settings() }
 }

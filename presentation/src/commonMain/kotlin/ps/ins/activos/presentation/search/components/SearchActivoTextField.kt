@@ -1,14 +1,17 @@
-package ps.ins.activos.presentation.home.components
+package ps.ins.activos.presentation.search.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -24,15 +27,18 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun SearchActivos (onClick: () -> Unit){
+fun SearchActivosTextField (
+    query: String,
+    onQueryChange: (String) -> Unit
+){
     Box(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
-            readOnly = true,
-            value = "",
+            readOnly = false,
+            value = query,
             placeholder = {
-                Text(text = "Mis Activos", fontSize = 16.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary)
+                Text(text = "Buscar Activos", fontSize = 16.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primary)
             },
-            onValueChange = {},
+            onValueChange = onQueryChange,
             shape = RoundedCornerShape(100.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -48,13 +54,6 @@ fun SearchActivos (onClick: () -> Unit){
                 unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
                 disabledBorderColor = MaterialTheme.colorScheme.onPrimary,
             )
-        )
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .padding(vertical = 10.dp, horizontal = 24.dp)
-                .clip(RoundedCornerShape(100.dp))
-                .clickable { onClick() }
         )
     }
 }
