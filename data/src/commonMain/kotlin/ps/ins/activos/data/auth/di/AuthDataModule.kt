@@ -12,6 +12,9 @@ val authDataModule = module {
     
     // LoginDataSource implementation
     single<LoginDataSource> { 
-        RemoteLoginDataSource(httpClient = get())
+        RemoteLoginDataSource(
+            httpClient = get(),
+            permissionManager = get()
+        )
     }
 }

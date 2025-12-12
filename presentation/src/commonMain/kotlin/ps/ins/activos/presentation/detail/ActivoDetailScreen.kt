@@ -40,17 +40,28 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import ps.ins.activos.domain.activos.model.ActivoEntity
 import ps.ins.activos.presentation.home.components.replaceLocalhostWithCurrentIp
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import cafe.adriel.voyager.koin.koinScreenModel
+
 
 data class ActivoDetailScreen(val activo: ActivoEntity) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val screenModel = koinScreenModel<ActivoDetailScreenModel>()
+        val state by screenModel.state.collectAsState()
+
+        androidx.compose.runtime.LaunchedEffect(activo.idActivo) {
+            screenModel.loadDetail(activo.idActivo)
+        }
         
-        Scaffold {
+        Scaffold { paddingValues ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(if (isSystemInDarkTheme()) Color(0xFF1C1B1C) else Color(0xFFF5F5F5))
+                    .padding(paddingValues)
             ) {
                 Column(
                     modifier = Modifier
@@ -150,10 +161,36 @@ data class ActivoDetailScreen(val activo: ActivoEntity) : Screen {
                             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
                             DetailRow("Responsable", activo.responsable)
                             
-                            if (activo.fechaAdquisicion != null) {
-                                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
-                                DetailRow("Fecha Adquisición", activo.fechaAdquisicion!!.take(10))
-                            }
+                            // Extra Details
+                             if (state.isLoading) {
+                                 Spacer(modifier = Modifier.height(16.dp))
+                                 Text("Cargando detalles...", style = MaterialTheme.typography.bodySmall)
+                             } else if (state.detail != null) {
+                                  val detail = state.detail!!
+                                  HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f), thickness = 2.dp)
+                                  
+                                  DetailRow("Descripción", detail.descripcion)
+                                  HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+                                  
+                                  DetailRow("No. Serie", detail.numeroSerie)
+                                  HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+                                  
+                                  DetailRow("Fecha Alta", detail.fechaAlta)
+                                  HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+                                  
+                                  DetailRow("Porta Etiqueta", if (detail.portaEtiqueta) "Sí" else "No")
+
+                                  if (!detail.donacion) {
+                                      HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+                                      DetailRow("Cuenta Contable", detail.cuentaContable ?: "-")
+                                      
+                                      HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+                                      DetailRow("Valor Adquisición", detail.valorAdquisicion?.toString() ?: "-")
+
+                                      HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
+                                      DetailRow("Fecha Adquisición", detail.fechaAdquisicion ?: "-")
+                                  }
+                             }
                         }
                     }
                     

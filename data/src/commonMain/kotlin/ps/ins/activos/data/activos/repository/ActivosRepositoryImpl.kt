@@ -24,4 +24,8 @@ class ActivosRepositoryImpl(
             propios + centros
         }
     }
+
+    override suspend fun getActivoDetail(id: String): Result<ps.ins.activos.domain.activos.model.ActivoDetail, NetworkError> {
+         return remoteDataSource.getActivoDetail(id).map { it.toDomain() }
+    }
 }

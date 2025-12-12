@@ -34,6 +34,7 @@ import ps.ins.activos.presentation.search.SearchScreen
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.koin.koinScreenModel
+import ps.ins.activos.presentation.core.permissions.WithPermission
 
 object HomeScreen : Screen {
 @Composable
@@ -73,7 +74,14 @@ fun HomeScreenContent(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 TopAppBar(onLogoutClick)
-                Spacer(modifier = Modifier.height(16.dp))
+                WithPermission("Activo_Ver_Detalle") {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "🔒 Tienes permiso: Activo_Ver_Detalle",
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 SearchActivos(onClick = onSearchClick)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -85,6 +93,8 @@ fun HomeScreenContent(
                     activos = state.activos,
                     modifier = Modifier.fillMaxWidth()
                 )
+
+
 
             }
         }

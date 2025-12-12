@@ -6,4 +6,5 @@ import ps.ins.activos.domain.activos.usecase.GetActivosPropiosUseCase
 val activosDomainModule = module {
     factory { GetActivosPropiosUseCase(repository = get()) }
     factory { ps.ins.activos.domain.activos.usecase.GetAllActivosUseCase(repository = get()) }
+    factory { ps.ins.activos.domain.activos.usecase.GetActivoDetailUseCase(repository = get()) }
 }

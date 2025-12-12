@@ -19,7 +19,13 @@ import ps.ins.activos.domain.core.util.Result
 import ps.ins.activos.domain.core.util.map
 
 
-class RemoteLoginDataSource(private val httpClient: HttpClient) : LoginDataSource {
+
+import ps.ins.activos.domain.permissions.PermissionManager
+
+class RemoteLoginDataSource(
+    private val httpClient: HttpClient,
+    private val permissionManager: PermissionManager
+) : LoginDataSource {
     override suspend fun doLogin(user: LoginUser): Result<User, NetworkError> {
         return safeCall<String> {
             println("🚀 Iniciando petición POST a /Auth/login")
@@ -34,7 +40,10 @@ class RemoteLoginDataSource(private val httpClient: HttpClient) : LoginDataSourc
             body // devuelve como String
         }.map { raw ->
             val dto = Json.decodeFromString<UserResponseDto>(raw)
-            dto.toDomain()
+            val userDomain = dto.toDomain()
+            // Guardar permisos
+            permissionManager.savePermissions(userDomain.permissions)
+            userDomain
         }
     }
 
