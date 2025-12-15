@@ -7,7 +7,9 @@ import ps.ins.activos.presentation.home.di.homeModule
 import ps.ins.activos.presentation.detail.di.detailModule
 import ps.ins.activos.presentation.search.di.searchModule
 
+import ps.ins.activos.presentation.transfer.di.transferModule
+
 val presentationModule = module {
-    includes(authPresentationModule, homeModule, searchModule, detailModule)
+    includes(authPresentationModule, homeModule, searchModule, detailModule, transferModule)
     single<Settings> { Settings() }
 }

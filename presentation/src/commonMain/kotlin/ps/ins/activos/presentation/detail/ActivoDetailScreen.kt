@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,15 +16,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +44,7 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import ps.ins.activos.domain.activos.model.ActivoEntity
 import ps.ins.activos.presentation.home.components.replaceLocalhostWithCurrentIp
+import ps.ins.activos.presentation.transfer.TransferActivoScreen
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.koin.koinScreenModel
@@ -52,8 +57,8 @@ data class ActivoDetailScreen(val activo: ActivoEntity) : Screen {
         val screenModel = koinScreenModel<ActivoDetailScreenModel>()
         val state by screenModel.state.collectAsState()
 
-        androidx.compose.runtime.LaunchedEffect(activo.idActivo) {
-            screenModel.loadDetail(activo.idActivo)
+        LaunchedEffect(activo.idActivo) {
+            screenModel.loadDetail(id = activo.idActivo)
         }
         
         Scaffold { paddingValues ->
@@ -150,7 +155,7 @@ data class ActivoDetailScreen(val activo: ActivoEntity) : Screen {
                         ),
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
-                        Column(modifier = Modifier.padding(24.dp)) {
+                        Column(modifier = Modifier.fillMaxHeight(fraction = 0.5f).padding(24.dp)) {
                             DetailRow("Marca", activo.marca)
                             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(), color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
                             DetailRow("Modelo", activo.modelo)
@@ -193,6 +198,14 @@ data class ActivoDetailScreen(val activo: ActivoEntity) : Screen {
                              }
                         }
                     }
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                        onClick = { navigator.push(TransferActivoScreen(activo)) }
+                    ) {
+                        Text(text = "Transferir Activo")
+                    }
+                    OutlinedButton(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), onClick = {}, ){Text(text = "Reportar Activo")}
                     
                     Spacer(modifier = Modifier.height(32.dp))
                 }
