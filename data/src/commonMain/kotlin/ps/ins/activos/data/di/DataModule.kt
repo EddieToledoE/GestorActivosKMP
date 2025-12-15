@@ -9,9 +9,10 @@ import ps.ins.activos.data.activos.di.activosDataModule
 import ps.ins.activos.data.permissions.PermissionManagerImpl
 import ps.ins.activos.domain.permissions.PermissionManager
 import ps.ins.activos.data.usuario.di.usuarioDataModule
+import ps.ins.activos.data.solicitud.di.solicitudDataModule
 
 val dataModule = module {
-    includes(authDataModule, activosDataModule, usuarioDataModule)
+    includes(authDataModule, activosDataModule, usuarioDataModule, solicitudDataModule)
 
     single { Settings() }
     single { PermissionManagerImpl(get()) } bind PermissionManager::class

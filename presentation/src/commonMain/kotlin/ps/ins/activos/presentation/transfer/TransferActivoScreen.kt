@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -27,9 +28,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +60,47 @@ data class TransferActivoScreen(val activo: ActivoEntity) : Screen {
         val state by screenModel.state.collectAsState()
         
         var searchText by remember { mutableStateOf("") }
+
+        LaunchedEffect(state.transferSuccess) {
+            if (state.transferSuccess != null) {
+                // Determine what to do on success. For now, pop back.
+                // Could also show a success dialog or Snackbar before popping.
+                // We will rely on the UI below to show success, or pop.
+                // Let's pop for now as basic flow.
+                // navigator.pop() // Or show a dialog first.
+            }
+        }
+
+        if (state.showConfirmDialog) {
+            AlertDialog(
+                onDismissRequest = { screenModel.onDismissDialog() },
+                title = { Text("Confirmar Transferencia") },
+                text = { Text("¿Estás seguro de que deseas transferir el activo '${activo.nombre}' a ${state.usuario?.nombreCompleto}?") },
+                confirmButton = {
+                    TextButton(onClick = { screenModel.onConfirmTransfer(activo.idActivo) }) {
+                        Text("Confirmar")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { screenModel.onDismissDialog() }) {
+                        Text("Cancelar")
+                    }
+                }
+            )
+        }
+
+        if (state.transferSuccess != null) {
+             AlertDialog(
+                onDismissRequest = { navigator.pop() },
+                title = { Text("Éxito") },
+                text = { Text(state.transferSuccess ?: "Solicitud creada correctamente") },
+                confirmButton = {
+                    TextButton(onClick = { navigator.pop() }) {
+                        Text("Aceptar")
+                    }
+                }
+            )
+        }
 
         Scaffold(
             topBar = {
@@ -122,16 +166,18 @@ data class TransferActivoScreen(val activo: ActivoEntity) : Screen {
 
                 // Results Area
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    if (state.isLoading) {
+                    if (state.isLoading || state.isTransferring) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     } else if (state.error != null) {
                         Text(
-                            text = "Error al buscar: ${state.error}",
+                            text = "Error: ${state.error}",
                             color = MaterialTheme.colorScheme.error,
                             modifier = Modifier.align(Alignment.Center)
                         )
                     } else if (state.usuario != null) {
-                        UsuarioDetailCard(state.usuario!!)
+                        UsuarioDetailCard(state.usuario!!) {
+                            screenModel.onRequestTransfer()
+                        }
                     }
                 }
             }
@@ -139,7 +185,7 @@ data class TransferActivoScreen(val activo: ActivoEntity) : Screen {
     }
     
     @Composable
-    fun UsuarioDetailCard(usuario: Usuario) {
+    fun UsuarioDetailCard(usuario: Usuario, onConfirm: () -> Unit) {
          Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp)
@@ -156,7 +202,7 @@ data class TransferActivoScreen(val activo: ActivoEntity) : Screen {
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
-                    onClick = { /* Implement transfer confirmation logic later */ },
+                    onClick = onConfirm,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Confirmar Transferencia")

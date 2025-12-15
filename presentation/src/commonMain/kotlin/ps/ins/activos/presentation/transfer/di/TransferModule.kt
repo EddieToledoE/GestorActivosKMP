@@ -4,5 +4,11 @@ import org.koin.dsl.module
 import ps.ins.activos.presentation.transfer.TransferActivoScreenModel
 
 val transferModule = module {
-    factory { TransferActivoScreenModel(get()) }
+    factory { 
+        TransferActivoScreenModel(
+            getUsuarioByFortiaUseCase = get(),
+            createTransferSolicitudUseCase = get(),
+            settings = get()
+        ) 
+    }
 }

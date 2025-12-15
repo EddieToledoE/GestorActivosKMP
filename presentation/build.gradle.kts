@@ -74,6 +74,7 @@ kotlin {
                 implementation(compose.materialIconsExtended)
                 implementation(compose.components.resources) //resources
                 implementation(libs.kamel)
+                implementation(libs.kotlinx.datetime)
             }
         }
 
