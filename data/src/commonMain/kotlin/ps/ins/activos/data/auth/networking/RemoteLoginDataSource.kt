@@ -34,6 +34,11 @@ class RemoteLoginDataSource(
                 setBody(user.toDto())
             }
             println("✅ Petición POST finalizada. Status: ${response.status}")
+
+            if (response.status.value !in 200..299) {
+                // Manually throw exception if status is not success
+                throw io.ktor.client.plugins.ClientRequestException(response, response.bodyAsText())
+            }
             
             val body = response.bodyAsText()
             println("📦 Login raw response:\n$body")
