@@ -5,7 +5,11 @@ import ps.ins.activos.data.solicitud.networking.KtorRemoteSolicitudDataSource
 import ps.ins.activos.data.solicitud.networking.RemoteSolicitudDataSource
 import ps.ins.activos.data.solicitud.repository.SolicitudRepositoryImpl
 import ps.ins.activos.domain.solicitud.repository.SolicitudRepository
+import ps.ins.activos.domain.solicitud.usecase.AcceptSolicitudUseCase
 import ps.ins.activos.domain.solicitud.usecase.CreateTransferSolicitudUseCase
+import ps.ins.activos.domain.solicitud.usecase.GetSolicitudesEnviadasUseCase
+import ps.ins.activos.domain.solicitud.usecase.GetSolicitudesRecibidasUseCase
+import ps.ins.activos.domain.solicitud.usecase.RejectSolicitudUseCase
 
 val solicitudDataModule = module {
     single<RemoteSolicitudDataSource> {
@@ -22,4 +26,8 @@ val solicitudDataModule = module {
     }
 
     factory { CreateTransferSolicitudUseCase(get()) }
+    factory { GetSolicitudesEnviadasUseCase(get()) }
+    factory { GetSolicitudesRecibidasUseCase(get()) }
+    factory { AcceptSolicitudUseCase(get()) }
+    factory { RejectSolicitudUseCase(get()) }
 }

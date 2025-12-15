@@ -31,7 +31,7 @@ import org.jetbrains.compose.resources.painterResource
 
 
 @Composable
-fun TopAppBar(onLogoutClick : ()-> Unit) {
+fun TopAppBar(onLogoutClick : ()-> Unit, onSolicitudesClick: () -> Unit) {
     TopAppBar(
         title = {
             Column {
@@ -43,7 +43,7 @@ fun TopAppBar(onLogoutClick : ()-> Unit) {
             containerColor =  if (isSystemInDarkTheme()) Color(0xFF1C1B1C) else  Color(0xFFE3E3E3)
         ),
         actions = {
-            IconButton(onClick = {}) {
+            IconButton(onClick = onSolicitudesClick) {
                 Icon(
                     imageVector = (Icons.AutoMirrored.Outlined.Article),
                     contentDescription = "Message",

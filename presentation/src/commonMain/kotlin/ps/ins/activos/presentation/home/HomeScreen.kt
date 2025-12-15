@@ -35,6 +35,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.koin.koinScreenModel
 import ps.ins.activos.presentation.core.permissions.WithPermission
+import ps.ins.activos.presentation.solicitudes.SolicitudesScreen
 
 object HomeScreen : Screen {
 @Composable
@@ -51,6 +52,9 @@ object HomeScreen : Screen {
             screenModel = screenModel,
             onSearchClick = {
                 navigator.push(SearchScreen)
+            },
+            onSolicitudesClick = {
+                navigator.push(SolicitudesScreen)
             }
         )
     }
@@ -60,6 +64,7 @@ object HomeScreen : Screen {
 fun HomeScreenContent(
     onLogoutClick: () -> Unit,
     onSearchClick: () -> Unit,
+    onSolicitudesClick: () -> Unit,
     screenModel: HomeScreenModel
 ) {
     val state by screenModel.state.collectAsState()
@@ -73,7 +78,7 @@ fun HomeScreenContent(
             contentAlignment = Alignment.TopCenter,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                TopAppBar(onLogoutClick)
+                TopAppBar(onLogoutClick = onLogoutClick, onSolicitudesClick = onSolicitudesClick )
                 WithPermission("Activo_Ver_Detalle") {
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
