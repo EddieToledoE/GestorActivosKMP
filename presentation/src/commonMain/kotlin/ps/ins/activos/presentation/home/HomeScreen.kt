@@ -25,6 +25,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.russhwolf.settings.Settings
 import org.koin.compose.koinInject
 import ps.ins.activos.presentation.auth.login.LoginScreen
+import ps.ins.activos.presentation.detail.ActivoDetailScreen
 import ps.ins.activos.presentation.home.components.CheckAutoAuditoriaStatus
 import ps.ins.activos.presentation.home.components.QuickView
 import ps.ins.activos.presentation.home.components.SearchActivos
@@ -34,6 +35,7 @@ import ps.ins.activos.presentation.search.SearchScreen
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.koin.koinScreenModel
+import ps.ins.activos.domain.activos.model.ActivoEntity
 import ps.ins.activos.presentation.core.permissions.WithPermission
 import ps.ins.activos.presentation.solicitudes.SolicitudesScreen
 
@@ -55,6 +57,9 @@ object HomeScreen : Screen {
             },
             onSolicitudesClick = {
                 navigator.push(SolicitudesScreen)
+            },
+            onActivoClick = { activo ->
+               navigator.push(ActivoDetailScreen(activo))
             }
         )
     }
@@ -65,6 +70,7 @@ fun HomeScreenContent(
     onLogoutClick: () -> Unit,
     onSearchClick: () -> Unit,
     onSolicitudesClick: () -> Unit,
+    onActivoClick: (ActivoEntity) -> Unit,
     screenModel: HomeScreenModel
 ) {
     val state by screenModel.state.collectAsState()
@@ -96,7 +102,10 @@ fun HomeScreenContent(
                 QuickView()
                 CarruselActivos(
                     activos = state.activos,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { idActivo ->
+                        state.activos.find { it.idActivo == idActivo }?.let { onActivoClick(it) }
+                    }
                 )
 
 

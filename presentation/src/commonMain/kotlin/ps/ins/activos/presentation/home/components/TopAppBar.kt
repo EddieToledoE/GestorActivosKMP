@@ -10,6 +10,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.automirrored.outlined.Message
+import androidx.compose.material.icons.filled.Doorbell
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,8 +48,8 @@ fun TopAppBar(onLogoutClick : ()-> Unit, onSolicitudesClick: () -> Unit) {
         actions = {
             IconButton(onClick = onSolicitudesClick) {
                 Icon(
-                    imageVector = (Icons.AutoMirrored.Outlined.Article),
-                    contentDescription = "Message",
+                    imageVector = (Icons.Default.NotificationsNone),
+                    contentDescription = "Notifications",
                     tint = MaterialTheme.colorScheme.primary
                 )
             }

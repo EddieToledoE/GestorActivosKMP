@@ -28,4 +28,34 @@ class ActivosRepositoryImpl(
     override suspend fun getActivoDetail(id: String): Result<ps.ins.activos.domain.activos.model.ActivoDetail, NetworkError> {
          return remoteDataSource.getActivoDetail(id).map { it.toDomain() }
     }
+
+    override suspend fun getHistory(id: String): Result<ps.ins.activos.domain.activos.model.ActivoHistory, NetworkError> {
+        return remoteDataSource.getHistory(id).map { dto ->
+            ps.ins.activos.domain.activos.model.ActivoHistory(
+                idActivo = dto.idActivo,
+                nombre = dto.nombre,
+                marca = dto.marca,
+                modelo = dto.modelo,
+                etiqueta = dto.etiqueta,
+                numeroSerie = dto.numeroSerie,
+                categoria = dto.categoria,
+                estado = dto.estado,
+                fechaAdquisicion = dto.fechaAdquisicion ?: "N/A",
+                imagenUrl = dto.imagenUrl,
+                responsableActual = dto.responsableActual ?: "Sin asignar",
+                centroCostoActual = dto.centroCostoActual ?: "N/A",
+                historial = dto.historialReubicaciones.map { reubicacion ->
+                    ps.ins.activos.domain.activos.model.Reubicacion(
+                        idReubicacion = reubicacion.idReubicacion,
+                        fecha = reubicacion.fecha,
+                        motivo = reubicacion.motivo,
+                        usuarioAnterior = reubicacion.usuarioAnterior ?: "N/A",
+                        centroCostoAnterior = reubicacion.centroCostoAnterior ?: "N/A",
+                        usuarioNuevo = reubicacion.usuarioNuevo ?: "N/A",
+                        centroCostoNuevo = reubicacion.centroCostoNuevo ?: "N/A"
+                    )
+                }
+            )
+        }
+    }
 }

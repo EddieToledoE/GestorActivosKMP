@@ -11,5 +11,6 @@ import ps.ins.activos.presentation.transfer.di.transferModule
 
 val presentationModule = module {
     includes(authPresentationModule, homeModule, searchModule, detailModule, transferModule)
+    factory { ps.ins.activos.presentation.history.ActivoHistoryScreenModel(get()) }
     single<Settings> { Settings() }
 }

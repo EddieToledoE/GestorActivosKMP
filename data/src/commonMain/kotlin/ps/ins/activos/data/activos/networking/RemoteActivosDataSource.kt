@@ -15,11 +15,13 @@ import ps.ins.activos.data.activos.dto.ActivosResponseDto
 
 
 import ps.ins.activos.data.activos.dto.ActivoDetailDto
+import ps.ins.activos.data.activos.dto.ActivoHistoryDto
 
 interface RemoteActivosDataSource {
     suspend fun getActivosPropios(): Result<List<ActivoDto>, NetworkError>
     suspend fun getAllActivos(): Result<ActivosResponseDto, NetworkError>
     suspend fun getActivoDetail(id: String): Result<ActivoDetailDto, NetworkError>
+    suspend fun getHistory(id: String): Result<ActivoHistoryDto, NetworkError>
 }
 
 class KtorRemoteActivosDataSource(
@@ -49,6 +51,15 @@ class KtorRemoteActivosDataSource(
              val userId = settings.getString("userId", "")
             httpClient.get(constructUrl("/Activo/$id")) {
                  header("X-User-Id", userId)
+            }.body()
+        }
+    }
+
+    override suspend fun getHistory(id: String): Result<ActivoHistoryDto, NetworkError> {
+        return safeCall<ActivoHistoryDto> {
+            val userId = settings.getString("userId", "")
+            httpClient.get(constructUrl("/Activo/$id/historial")) {
+                header("X-User-Id", userId)
             }.body()
         }
     }

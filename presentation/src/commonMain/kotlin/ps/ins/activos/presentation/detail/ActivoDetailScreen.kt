@@ -45,9 +45,11 @@ import io.kamel.image.asyncPainterResource
 import ps.ins.activos.domain.activos.model.ActivoEntity
 import ps.ins.activos.presentation.home.components.replaceLocalhostWithCurrentIp
 import ps.ins.activos.presentation.transfer.TransferActivoScreen
+import ps.ins.activos.presentation.history.ActivoHistoryScreen
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.koin.koinScreenModel
+import ps.ins.activos.presentation.core.permissions.WithPermission
 
 
 data class ActivoDetailScreen(val activo: ActivoEntity) : Screen {
@@ -205,8 +207,15 @@ data class ActivoDetailScreen(val activo: ActivoEntity) : Screen {
                     ) {
                         Text(text = "Transferir Activo")
                     }
-                    OutlinedButton(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), onClick = {}, ){Text(text = "Reportar Activo")}
-                    
+                    WithPermission("Activo_Historial") {
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                            onClick = { navigator.push(ActivoHistoryScreen(activo.idActivo)) }
+                        ) {
+                            Text(text = "Historial de traspasos")
+                        }
+                    }
+
                     Spacer(modifier = Modifier.height(32.dp))
                 }
             }

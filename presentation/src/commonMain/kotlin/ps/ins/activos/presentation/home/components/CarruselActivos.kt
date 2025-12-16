@@ -49,7 +49,8 @@ import ps.ins.activos.domain.activos.model.ActivoEntity
 @Composable
 fun CarruselActivos(
     activos: List<ActivoEntity>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit
 ) {
     val displayActivos = activos.take(8)
     val chunks = displayActivos.chunked(4)
@@ -90,16 +91,16 @@ fun CarruselActivos(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        GridItem(pageItems.getOrNull(0))
-                        GridItem(pageItems.getOrNull(1))
+                        GridItem(pageItems.getOrNull(0), onClick)
+                        GridItem(pageItems.getOrNull(1), onClick)
                     }
                     // Fila 2
                     Row(
                         modifier = Modifier.weight(1f).fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        GridItem(pageItems.getOrNull(2))
-                        GridItem(pageItems.getOrNull(3))
+                        GridItem(pageItems.getOrNull(2), onClick)
+                        GridItem(pageItems.getOrNull(3), onClick)
                     }
                 }
             }
@@ -108,18 +109,19 @@ fun CarruselActivos(
 }
 
 @Composable
-fun RowScope.GridItem(activo: ActivoEntity?) {
+fun RowScope.GridItem(activo: ActivoEntity?, onClick: (String) -> Unit) {
     Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
         if (activo != null) {
-            ActivoItem(activo, modifier = Modifier.fillMaxSize())
+            ActivoItem(activo, modifier = Modifier.fillMaxSize(), onClick = { onClick(activo.idActivo) })
         }
     }
 }
 
 @Composable
-fun ActivoItem(activo: ActivoEntity, modifier: Modifier = Modifier) {
+fun ActivoItem(activo: ActivoEntity, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(12.dp),
+        onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = if(isSystemInDarkTheme())MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface),
         modifier = modifier
     ) {

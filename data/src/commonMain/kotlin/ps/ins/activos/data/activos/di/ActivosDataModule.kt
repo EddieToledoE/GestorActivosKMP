@@ -19,4 +19,8 @@ val activosDataModule = module {
             remoteDataSource = get()
         )
     }
+    
+    factory { ps.ins.activos.domain.activos.usecase.GetActivosPropiosUseCase(get()) }
+    factory { ps.ins.activos.domain.activos.usecase.GetActivoDetailUseCase(get()) }
+    factory { ps.ins.activos.domain.activos.usecase.GetActivoHistoryUseCase(get()) }
 }

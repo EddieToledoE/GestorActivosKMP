@@ -105,7 +105,7 @@ buildkonfig {
     packageName = "ps.ins.activos.config"
     exposeObjectWithName = "BuildKonfig"
     defaultConfigs {
-        buildConfigField(type = STRING, name = "API_URL", value =  "http://192.168.110.63:45459/api")
+        buildConfigField(type = STRING, name = "API_URL", value =  "http://192.168.110.63:45456/api")
         buildConfigField(type = STRING, name = "MINIO_IP", value =  "192.168.110.63")
     }
 }
