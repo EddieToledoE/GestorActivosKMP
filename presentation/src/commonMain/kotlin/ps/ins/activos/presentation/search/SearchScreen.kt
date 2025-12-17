@@ -26,6 +26,7 @@ import ps.ins.activos.presentation.search.components.CategoryFilterRow
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.koin.koinScreenModel
@@ -65,7 +66,10 @@ object SearchScreen : Screen {
                     Spacer(modifier = Modifier.height(8.dp))
                     if (state.isLoading) {
                         // Optional: Show loading indicator
-                        Text("Cargando...", modifier = Modifier.padding(16.dp))
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(8.dp),
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     } else if (state.error != null) {
                         Text("Error: ${state.error}", color = MaterialTheme.colorScheme.error)
                     } else {
