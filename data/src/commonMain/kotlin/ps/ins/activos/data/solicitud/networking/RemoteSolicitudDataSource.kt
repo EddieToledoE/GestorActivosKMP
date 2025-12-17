@@ -17,6 +17,7 @@ import ps.ins.activos.data.solicitud.dto.RejectSolicitudDto
 import ps.ins.activos.data.solicitud.dto.SolicitudDetailDto
 import ps.ins.activos.data.solicitud.dto.SolicitudRequestDto
 import ps.ins.activos.data.solicitud.dto.SolicitudResponseDto
+import ps.ins.activos.data.solicitud.dto.SolicitudConteoDto
 import ps.ins.activos.domain.core.util.NetworkError
 import ps.ins.activos.domain.core.util.Result
 
@@ -27,6 +28,7 @@ interface RemoteSolicitudDataSource {
     suspend fun getSolicitudesRecibidas(userId: String): Result<List<SolicitudDetailDto>, NetworkError>
     suspend fun acceptSolicitud(idSolicitud: String, request: AcceptSolicitudDto): Result<Boolean, NetworkError>
     suspend fun rejectSolicitud(idSolicitud: String, request: RejectSolicitudDto): Result<Boolean, NetworkError>
+    suspend fun getConteo(): Result<SolicitudConteoDto, NetworkError>
 }
 
 class KtorRemoteSolicitudDataSource(
@@ -84,6 +86,15 @@ class KtorRemoteSolicitudDataSource(
                 setBody(request)
             }
             true
+        }
+    }
+
+    override suspend fun getConteo(): Result<SolicitudConteoDto, NetworkError> {
+        return safeCall<SolicitudConteoDto> {
+            val userId = settings.getString("userId", "")
+            httpClient.get(constructUrl("/Solicitud/conteo/$userId")) {
+                 header("X-User-Id", userId)
+            }.body()
         }
     }
 }

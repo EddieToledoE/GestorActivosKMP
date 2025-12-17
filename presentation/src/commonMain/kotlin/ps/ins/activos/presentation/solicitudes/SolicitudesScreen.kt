@@ -169,7 +169,10 @@ object SolicitudesScreen : Screen {
                         Tab(
                             selected = selectedTab == index,
                             onClick = { selectedTab = index },
-                            text = { Text(title) }
+                            text = { 
+                                val count = if (index == 0) state.entrantesCount else state.salientesCount
+                                Text("$title ($count)") 
+                            }
                         )
                     }
                 }

@@ -14,6 +14,8 @@ import androidx.compose.material.icons.filled.Doorbell
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.outlined.Logout
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,7 +36,7 @@ import org.jetbrains.compose.resources.painterResource
 
 
 @Composable
-fun TopAppBar(onLogoutClick : ()-> Unit, onSolicitudesClick: () -> Unit) {
+fun TopAppBar(onLogoutClick : ()-> Unit, onSolicitudesClick: () -> Unit, badgeCount: Int = 0) {
     TopAppBar(
         title = {
             Column {
@@ -47,11 +49,21 @@ fun TopAppBar(onLogoutClick : ()-> Unit, onSolicitudesClick: () -> Unit) {
         ),
         actions = {
             IconButton(onClick = onSolicitudesClick) {
-                Icon(
-                    imageVector = (Icons.Default.NotificationsNone),
-                    contentDescription = "Notifications",
-                    tint = MaterialTheme.colorScheme.primary
-                )
+                BadgedBox(
+                    badge = {
+                        if (badgeCount > 0) {
+                            Badge {
+                                Text(text = badgeCount.toString())
+                            }
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = if (badgeCount > 0) Icons.Filled.Notifications else Icons.Default.NotificationsNone,
+                        contentDescription = "Notifications",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
             IconButton(onClick = onLogoutClick) {
                 Icon(

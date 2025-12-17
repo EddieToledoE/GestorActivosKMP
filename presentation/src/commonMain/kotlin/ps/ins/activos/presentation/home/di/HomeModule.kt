@@ -6,7 +6,8 @@ import ps.ins.activos.presentation.home.HomeScreenModel
 val homeModule = module {
     factory { 
         HomeScreenModel(
-            getActivosPropiosUseCase = get()
+            getActivosPropiosUseCase = get(),
+            getSolicitudConteoUseCase = get()
         ) 
     }
 }

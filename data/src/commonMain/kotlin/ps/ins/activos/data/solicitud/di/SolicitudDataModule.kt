@@ -10,6 +10,7 @@ import ps.ins.activos.domain.solicitud.usecase.CreateTransferSolicitudUseCase
 import ps.ins.activos.domain.solicitud.usecase.GetSolicitudesEnviadasUseCase
 import ps.ins.activos.domain.solicitud.usecase.GetSolicitudesRecibidasUseCase
 import ps.ins.activos.domain.solicitud.usecase.RejectSolicitudUseCase
+import ps.ins.activos.domain.solicitud.usecase.GetSolicitudConteoUseCase
 
 val solicitudDataModule = module {
     single<RemoteSolicitudDataSource> {
@@ -30,4 +31,5 @@ val solicitudDataModule = module {
     factory { GetSolicitudesRecibidasUseCase(get()) }
     factory { AcceptSolicitudUseCase(get()) }
     factory { RejectSolicitudUseCase(get()) }
+    factory { GetSolicitudConteoUseCase(get()) }
 }

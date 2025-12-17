@@ -18,6 +18,7 @@ val transferModule = module {
             getSolicitudesRecibidasUseCase = get(),
             acceptSolicitudUseCase = get(),
             rejectSolicitudUseCase = get(),
+            getSolicitudConteoUseCase = get(),
             settings = get()
         )
     }

@@ -34,6 +34,7 @@ import ps.ins.activos.presentation.home.components.CarruselActivos
 import ps.ins.activos.presentation.search.SearchScreen
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import cafe.adriel.voyager.koin.koinScreenModel
 import ps.ins.activos.domain.activos.model.ActivoEntity
 import ps.ins.activos.presentation.core.permissions.WithPermission
@@ -84,15 +85,15 @@ fun HomeScreenContent(
             contentAlignment = Alignment.TopCenter,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                TopAppBar(onLogoutClick = onLogoutClick, onSolicitudesClick = onSolicitudesClick )
-                WithPermission("Activo_Ver_Detalle") {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "🔒 Tienes permiso: Activo_Ver_Detalle",
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                LaunchedEffect(Unit) {
+                    screenModel.getNotificationCount()
+                    screenModel.getActivosPropios()
                 }
+                TopAppBar(
+                    onLogoutClick = onLogoutClick, 
+                    onSolicitudesClick = onSolicitudesClick,
+                    badgeCount = state.notificationCount
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 SearchActivos(onClick = onSearchClick)
                 Spacer(modifier = Modifier.height(16.dp))

@@ -5,21 +5,34 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.launch
 import ps.ins.activos.domain.activos.model.ActivoEntity
 import ps.ins.activos.domain.activos.usecase.GetActivosPropiosUseCase
+import ps.ins.activos.domain.solicitud.usecase.GetSolicitudConteoUseCase
 import ps.ins.activos.domain.core.util.NetworkError
 import ps.ins.activos.domain.core.util.Result
+import ps.ins.activos.domain.core.util.onSuccess
 
 data class HomeState(
     val isLoading: Boolean = false,
     val error: String? = null,
-    val activos: List<ActivoEntity> = emptyList()
+    val activos: List<ActivoEntity> = emptyList(),
+    val notificationCount: Int = 0
 )
 
 class HomeScreenModel(
-    private val getActivosPropiosUseCase: GetActivosPropiosUseCase
+    private val getActivosPropiosUseCase: GetActivosPropiosUseCase,
+    private val getSolicitudConteoUseCase: GetSolicitudConteoUseCase
 ) : StateScreenModel<HomeState>(HomeState()) {
 
     init {
         getActivosPropios()
+        getNotificationCount()
+    }
+    
+    fun getNotificationCount() {
+        screenModelScope.launch {
+            getSolicitudConteoUseCase().onSuccess { conteo ->
+                 mutableState.value = state.value.copy(notificationCount = conteo.total)
+            }
+        }
     }
 
     fun getActivosPropios() {

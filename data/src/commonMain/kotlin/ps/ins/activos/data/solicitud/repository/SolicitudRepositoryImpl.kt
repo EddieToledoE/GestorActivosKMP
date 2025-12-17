@@ -13,6 +13,7 @@ import ps.ins.activos.domain.solicitud.model.SolicitudResponse
 import ps.ins.activos.domain.solicitud.repository.SolicitudRepository
 
 import ps.ins.activos.data.solicitud.dto.SolicitudDetailDto
+import ps.ins.activos.domain.solicitud.model.SolicitudConteo
 import ps.ins.activos.domain.solicitud.model.SolicitudDetail
 
 class SolicitudRepositoryImpl(
@@ -54,6 +55,16 @@ class SolicitudRepositoryImpl(
     override suspend fun rejectSolicitud(idSolicitud: String, idUsuarioAprobador: String, motivoRechazo: String): Result<Boolean, NetworkError> {
         val dto = RejectSolicitudDto(idUsuarioAprobador, motivoRechazo)
         return remoteDataSource.rejectSolicitud(idSolicitud, dto)
+    }
+
+    override suspend fun getConteo(): Result<SolicitudConteo, NetworkError> {
+        return remoteDataSource.getConteo().map { dto ->
+            SolicitudConteo(
+                total = dto.total,
+                entrantes = dto.individual.entrantes,
+                salientes = dto.individual.salientes
+            )
+        }
     }
 
     private fun SolicitudDetailDto.toDomain(): SolicitudDetail {
